@@ -4,8 +4,7 @@
   08/20/14
 */
 
-// This needs to be the path to the folder containing this dofile and stataHC.js
-global STATA_HC_PATH_TO_FOLDER "D:/Ado/personal"
+
 
 capture program drop injectFile
 program define injectFile
@@ -74,9 +73,12 @@ program define stataHC
   local outvars `first' `rest' `by'
   outsheet `outvars' using `tcsv' `if', replace comma
 
+  // Local path to ado file
+  local script "`c(sysdir_personal)’/stataHC.js"
+
   // Open all the component files for the chart
   file open `thtml_file' using "`using'", write `replace'
-  file open `tjs_file' using "${STATA_HC_PATH_TO_FOLDER}/stataHC.js", read
+  file open `tjs_file' using "`script'", read
   file open `tcsv_file' using `tcsv', read
 
   // Write the beginning of the html file
