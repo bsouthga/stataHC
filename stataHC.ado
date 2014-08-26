@@ -74,7 +74,9 @@ program define stataHC
   outsheet `outvars' using `tcsv' `if', replace comma
 
   // Local path to ado file
-  local script "`c(sysdir_personal)’/stataHC.js"
+  findfile stataHC.ado
+  local thisDir = subinstr("`r(fn)'", "/stata.ado", "", .)
+  local script "`thisDir’/stataHC.js"
 
   // Open all the component files for the chart
   file open `thtml_file' using "`using'", write `replace'
