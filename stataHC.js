@@ -25,7 +25,6 @@ $(document).ready(function() {
 
   var series = genSeriesList(data, stataHC.y_variables);
 
-  console.log(dataArr, data, series)
   var x_val_formatter = function(x) {
     return (stataHC.date ? Highcharts.dateFormat('%a %d %b', x) : x);
   }
@@ -33,7 +32,7 @@ $(document).ready(function() {
   var formatter;
   if (stataHC.y_variables.length > 1 && stataHC.type === "line") {
     formatter = function () {
-          var s = '<b>' + x_val_formatter(this.x) + '</b>';
+          var s = '<b>' + stataHC.x_var + " : " + x_val_formatter(this.x) + '</b>';
           $.each(this.points, function () {
               s += '<br/>' + this.series.name + ': ' + this.y;
           });
@@ -46,7 +45,7 @@ $(document).ready(function() {
             (this.series ? this.series.name :null ) || 
             (this.points && this.points.series ? this.points.series.name : null )
           );
-          return '<b>' + x_val_formatter(this.x) + '</b><br/>' + name + ': ' + this.y;
+          return '<b>'+ stataHC.x_var + " : " + x_val_formatter(this.x) + '</b><br/>' + name + ': ' + this.y;
       }    
   }
 

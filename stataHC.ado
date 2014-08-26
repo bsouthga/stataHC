@@ -4,10 +4,8 @@
   08/20/14
 */
 
-
-
-capture program drop injectFile
-program define injectFile
+capture program drop _injectFile
+program define _injectFile
   /*
     Read a file (`1') and write it line by line
     to another file (`2'). Both files should be 
@@ -29,7 +27,7 @@ capture program drop stataHC
 program define stataHC
 
   syntax varlist(min=2 numeric) [if] using/ [, ///
-      title(string) type(string) xdate(integer 0) ///
+      title(string) type(string) ///
       xTitle(string) yTitle(string) by(varname) replace ///
     ]
 
@@ -52,11 +50,25 @@ program define stataHC
 
   // Create a temporary csv file and write out the current dataset
   tempfile tcsv
+  local outvars `first' `rest' `by'
+  outsheet `outvars' using `tcsv' `if', replace comma
+
+  // Local path to ado file
+  findfile stataHC.ado
+  local thisDir = subinstr("`r(fn)'", "/stataHC.ado", "", .)
+  // Highcharts code to inject
+  local script "`thisDir'/stataHC.js"
 
   // temporary names for files
   tempname thtml_file
   tempname tcsv_file
   tempname tjs_file
+
+  // Open all the component files for the chart
+  file open `thtml_file' using "`using'", write `replace'
+  file open `tjs_file' using "`script'", read
+  file open `tcsv_file' using `tcsv', read
+
 
   // The start of the new html file
   local html_top ///
@@ -70,24 +82,11 @@ program define stataHC
       <div id='chart'></div> ///
       <script> 
 
-  local outvars `first' `rest' `by'
-  outsheet `outvars' using `tcsv' `if', replace comma
-
-  // Local path to ado file
-  findfile stataHC.ado
-  local thisDir = subinstr("`r(fn)'", "/stata.ado", "", .)
-  local script "`thisDir’/stataHC.js"
-
-  // Open all the component files for the chart
-  file open `thtml_file' using "`using'", write `replace'
-  file open `tjs_file' using "`script'", read
-  file open `tcsv_file' using `tcsv', read
-
   // Write the beginning of the html file
   file write `thtml_file' "`html_top'" _n
 
   // Inject the javascript
-  injectFile `tjs_file' `thtml_file'
+  _injectFile `tjs_file' `thtml_file'
 
   // defaults
   if ("`type'" == "") { 
@@ -95,6 +94,23 @@ program define stataHC
   }
   if ("`title'" == "") { 
     local title "Stata Output" 
+  }
+
+  // Check for date variables 
+  quietly ds, has(format %t* %-t*)
+  local date_vars "`r(varlist)'"
+  local num_date_vars `: word count `date_vars''
+  // If first variable in varlist is date variable
+  // use date format for axis
+  local x_date = 0
+  if (`num_date_vars' > 0) {
+    forval i=1/`num_date_vars' {
+      local curr_var "`: word `i' of `date_vars''"
+      if ("`first'" == "`curr_var'") {
+        local x_date = 1
+        local type "line" 
+      }
+    }    
   }
 
   // Write user settings
@@ -105,7 +121,7 @@ program define stataHC
       'x_var' : '`first'', ///
       'type' : '`type'', ///
       'byvar' : '`by'', ///
-      'date' : `xdate', ///
+      'date' : `x_date', ///
       'xTitle' : '`xTitle'', ///
       'yTitle' : '`yTitle'' ///
     } 
@@ -114,7 +130,7 @@ program define stataHC
 
   // Inject the csv string
   file write `thtml_file' "stataHC.data = '"
-  injectFile `tcsv_file' `thtml_file' 1
+  _injectFile `tcsv_file' `thtml_file' 1
   file write `thtml_file' "';</script></body></html>" 
 
 end
