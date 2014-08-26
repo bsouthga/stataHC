@@ -25,8 +25,8 @@ This creates an html file (with the filename given after `using`, including `.ht
 #### Example Usage
 
     // Use sample data from Stata
-    sysuse auto
+    sysuse sp500
     
     // Produce chart and save to 'chart.html' on desktop
-    stataHC mpg weight using "~/Desktop/chart.html", title("Example Plot")
+    stataHC date open close low high using ~/Desktop/chart.html
     
