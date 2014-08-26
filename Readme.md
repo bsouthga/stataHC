@@ -4,10 +4,23 @@
 
 `stataHC` is a new command for [Stata](http://www.stata.com/) that allows the automatic generation of [highcharts](http://www.highcharts.com/) 2d plots fully contained in a single html file that can be dragged into any browser.
 
+
+#### Example Usage
+
+    // Use sample data from Stata
+    sysuse sp500
+    
+    // Produce chart and save to 'chart.html' on desktop
+    stataHC date open close low high using ~/Desktop/chart.html
+    
+#### Resulting Output
+
+![alt tag](https://raw.githubusercontent.com/bsouthga/stataHC/master/example.png)
+
+
 ## Requirements
 
 I've so far (lightly) tested it on Stata versions 11-13. Everything should work under both **OSX** and **Windows**.
-
 
 ## Installation
 
@@ -22,14 +35,3 @@ The command syntax is as follows:
 This creates an html file (with the filename given after `using`, including `.html`) which can be opened in any modern browser.
 
 
-#### Example Usage
-
-    // Use sample data from Stata
-    sysuse sp500
-    
-    // Produce chart and save to 'chart.html' on desktop
-    stataHC date open close low high using ~/Desktop/chart.html
-    
-#### Resulting Output
-
-![alt tag](https://raw.githubusercontent.com/bsouthga/stataHC/master/example.png)
