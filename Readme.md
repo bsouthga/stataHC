@@ -2,7 +2,7 @@
 
 ## Package Info
 
-`stataHC` is a new command for [Stata](http://www.stata.com/) that allows the automatic generation of [highcharts](http://www.highcharts.com/) 2d plots fully contained in a single html file that can be dragged into any browser.
+`stataHC` is a new command for [Stata](http://www.stata.com/) that allows the automatic generation of [highcharts](http://www.highcharts.com/) interactive 2d plots fully contained in a single html file that can be dragged into any browser.
 
 
 #### Example Usage
