@@ -30,3 +30,6 @@ This creates an html file (with the filename given after `using`, including `.ht
     // Produce chart and save to 'chart.html' on desktop
     stataHC date open close low high using ~/Desktop/chart.html
     
+#### Resulting Output
+
+![alt tag](https://raw.githubusercontent.com/bsouthga/stataHC/master/example.png)
