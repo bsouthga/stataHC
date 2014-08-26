@@ -11,7 +11,7 @@ I've so far (lightly) tested it on Stata versions 11-13. Everything should work 
 
 ## Installation
 
-To install, simply drag `stataHC.do` and `stataHC.js` to your personal `.ado` folder. To determine where this is, run the Stata command `sysdir`.
+To install, simply drag `stataHC.ado` and `stataHC.js` to your personal `.ado` folder. To determine where this is, run the Stata command `sysdir`.
 
 ## Usage syntax
 
